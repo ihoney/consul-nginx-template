@@ -1,0 +1,24 @@
+---
+- name: create consul dir
+  file: path={{item.path}} state={{item.state}}
+  with_items:
+    - {path: {{base_home}},            state: 'directory'}
+    - {path: {{base_home}}/bin,        state: 'directory'}
+    - {path: {{base_home}}/conf,       state: 'directory'}
+    - {path: {{base_home}}/data,       state: 'directory'}
+    - {path: {{base_home}}/log,        state: 'directory'}
+
+- name: copy consul and start shell
+  copy: src={{item.src}} dest={{base_home}}/{{item.dest}}
+  with_items:
+    - {src: bin/consul, dest: 'bin'}
+    - {src: bin/consul_ui.zip, dest: 'bin'}
+    - {src: start.sh, dest: 'bin'}
+    - {src: client.json, dest: 'conf'}
+
+- name: start consul
+  shell: |
+    cd {{base_home}}
+    chmod +x bin/consul bin/start.sh
+    unzip bin/consul_ui.zip
+    sh bin/start.sh || exit 1

@@ -1,0 +1,7 @@
+---
+- hosts: consul
+  remote_user: {{user}}
+  roles:
+    - consul
+    - nginx
+    - consul-template

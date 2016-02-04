@@ -1,0 +1,9 @@
+{
+    "server": false,
+    "datacenter": "VIP2",
+    "data_dir": "/home/easemob/consul/data",
+    "ui_dir": "/home/easemob/consul/consul_ui",
+    "log_level": "INFO",
+    "enable_syslog": true,
+    "start_join": ["10.47.126.5", "10.47.125.160", "10.252.223.59"]
+}

@@ -1,0 +1,21 @@
+---
+- name: copy nginx and conf
+  copy: src={{item.src}} dest={{base_home}}/{{item.dest}}
+  with_items:
+    - {src: bin/nginx.tar.gz, dest: 'bin'}
+    - {src: nginx.conf, dest: 'conf'}
+
+- name: install nginx
+  shell: |
+    test -x {{base_home}}/nginx/sbin/nginx && exit 0
+    cd {{base_home}}/bin
+    tar -zxf nginx.tar.gz 
+    cd nginx
+    ./configure --prefix={{base_home}}/nginx --with-stream
+    make install
+
+- name: start nginx
+  shell: |
+    cd {{base_home}}
+    cp conf/nginx.conf nginx/conf
+    test -e nginx/logs/nginx.pid || nginx/sbin/nginx || exit 1

@@ -1,0 +1,2 @@
+[consul]
+test.host.[1:1] ansible_ssh_port=22

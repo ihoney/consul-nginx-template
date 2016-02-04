@@ -1,0 +1,23 @@
+#!/bin/bash
+
+CURHOME=`cd $(dirname $0) && pwd`
+
+user=$1
+base_home=$2
+
+function help() {
+  test "$1" && echo $1
+  echo "Usage: "`basename $0`" [user] [base_home]"
+  exit 1
+}
+
+function check() {
+  test -n $user || help "arg not found: user"
+  test -n $base_home || help "arg not found: base_home"
+  which ansible-playbook || help "command not found: ansible-playbook"
+}
+
+check
+
+sh $CURHOME/init.sh
+ansible-playbook -i $CURHOME/etc/consul.host $CURHOME/consul.yaml -e "user=$user base_home=$base_home"

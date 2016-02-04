@@ -1,0 +1,19 @@
+---
+- name: create template dir
+  file: path={{item.path}} state={{item.state}}
+  with_items:
+    - {path: {{base_home}}/template, state: 'directory'}
+
+- name: copy consul-template and start-template.sh
+  copy: src={{item.src}} dest={{base_home}}/{{item.dest}}
+  with_items:
+    - {src: bin/consul-template, dest: 'bin'}
+    - {src: start-template.sh, dest: 'bin'}
+    - {src: template.ctpl, dest: 'template'}
+
+- name: start consul-template
+  shell: |
+    pgrep nginx || exit 1
+    cd {{base_home}}
+    chmod +x bin/consul-template bin/start-template.sh
+    sh bin/start-template.sh || exit 2
